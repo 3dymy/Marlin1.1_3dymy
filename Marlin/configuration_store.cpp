@@ -329,6 +329,7 @@ void MarlinSettings::postprocess() {
 	  return !eeprom_write_error;
   }
 
+//20170927  add fE0pos
   bool MarlinSettings::ReadXDData(){
 	  //SERIAL_ECHO_START;
 	  eeprom_read_error = false;
