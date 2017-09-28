@@ -12008,7 +12008,7 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
 
  #if ENABLED(POWER_DETECT)
     static int powerCount = 0;   // make the inactivity button a bit less responsive
-    const int POWER_DELAY = 750;
+    const int POWER_DELAY = 200;
     if (READ(POWER_DETECT_PIN)==POWER_DETECT_INVERTING){
     	if(powerCount<POWER_DELAY+1)
     	powerCount++;
@@ -12020,7 +12020,7 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
 	//when power off,S is HIGH  powercount=0;
     if(powerCount==0 && power_flag==0 ){
     	handle_power_detect();
-    	SERIAL_ECHOLNPGM("Power Down Detected!");
+    	//SERIAL_ECHOLNPGM("Power Down Detected!");
     	power_flag=1;	//power on,cann't detect power and flag==0��set flag=1
     }
 	

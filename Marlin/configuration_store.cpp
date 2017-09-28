@@ -305,6 +305,7 @@ void MarlinSettings::postprocess() {
 	  cFName[iFLen]='\0';
 	  
 	  EEPROM_WRITE(cFName);
+	  SERIAL_PROTOCOLPGM("\nPower Off Data Save to EEPROM:");
 	  return !eeprom_write_error;
   }
   
