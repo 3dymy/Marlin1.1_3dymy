@@ -364,8 +364,10 @@ static uint8_t cmd_queue_index_r = 0, // Ring buffer read position
                cmd_queue_index_w = 0; // Ring buffer write position
 #if ENABLED(M100_FREE_MEMORY_WATCHER)
   char command_queue[BUFSIZE][MAX_CMD_SIZE];  // Necessary so M100 Free Memory Dumper can show us the commands and any corruption
+  uint32_t  sdfilepos[BUFSIZE];
 #else                                         // This can be collapsed back to the way it was soon.
-static char command_queue[BUFSIZE][MAX_CMD_SIZE];
+	static char command_queue[BUFSIZE][MAX_CMD_SIZE];
+	static uint32_t  sdfilepos[BUFSIZE];
 #endif
 
 /**
@@ -375,6 +377,7 @@ static char command_queue[BUFSIZE][MAX_CMD_SIZE];
 static char *current_command,      // The command currently being executed
             *current_command_args, // The address where arguments begin
             *seen_pointer;         // Set by code_seen(), used by the code_value functions
+static uint32_t current_sdfilepos;
 
 /**
  * Next Injected Command pointer. NULL if no commands are being injected.
@@ -855,6 +858,7 @@ inline void _commit_command(bool say_ok) {
 inline bool _enqueuecommand(const char* cmd, bool say_ok=false) {
   if (*cmd == ';' || commands_in_queue >= BUFSIZE) return false;
   strcpy(command_queue[cmd_queue_index_w], cmd);
+  sdfilepos[cmd_queue_index_w]=0;
   _commit_command(say_ok);
   return true;
 }
@@ -1224,6 +1228,8 @@ inline void get_serial_commands() {
         if (!sd_count) continue; // skip empty lines (and comment lines)
 
         command_queue[cmd_queue_index_w][sd_count] = '\0'; // terminate string
+		sdfilepos[cmd_queue_index_w]=card.getsdpos();
+		
         sd_count = 0; // clear sd line buffer
 
         _commit_command(false);
@@ -9777,6 +9783,7 @@ inline void gcode_T(uint8_t tmp_extruder) {
  */
 void process_next_command() {
   current_command = command_queue[cmd_queue_index_r];
+  current_sdfilepos=sdfilepos[cmd_queue_index_r];
 
   if (DEBUGGING(ECHO)) {
     SERIAL_ECHO_START;

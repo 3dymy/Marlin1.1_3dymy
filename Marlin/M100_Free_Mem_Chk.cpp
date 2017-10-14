@@ -55,6 +55,7 @@
 #define TEST_BYTE ((char) 0xE5)
 
 extern char command_queue[BUFSIZE][MAX_CMD_SIZE];
+extern uint32_t  sdfilepos[BUFSIZE];
 
 extern char* __brkval;
 extern size_t  __heap_start, __heap_end, __flp;
