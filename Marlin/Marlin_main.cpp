@@ -11787,8 +11787,11 @@ void prepare_move_to_destination() {
 	  //SERIAL_PROTOCOLPGM("\nfeedrate_mm_s:");
 	  //SERIAL_PROTOCOL(feedrate_mm_s*60);	  
 	
-      settings.SaveCurrentPos(cpFName,fLength,card.getsdpos(),current_position[X_AXIS],current_position[Y_AXIS],current_position[Z_AXIS],current_position[E_AXIS],feedrate_mm_s*60,temp0,tempBed);
-
+      settings.SaveCurrentPos(cpFName,fLength,current_sdfilepos,current_position[X_AXIS],current_position[Y_AXIS],current_position[Z_AXIS],current_position[E_AXIS],feedrate_mm_s*60,temp0,tempBed);
+	  SERIAL_PROTOCOLPGM("\ncard.pos:");
+	  SERIAL_PROTOCOL(card.getsdpos());
+	  SERIAL_PROTOCOLPGM("\ncurrent pos:");
+	  SERIAL_PROTOCOL(current_sdfilepos);
 
 	  //SERIAL_PROTOCOLPGM("\nin handle  ReadXDData:");
 	  //SERIAL_PROTOCOL(0);
